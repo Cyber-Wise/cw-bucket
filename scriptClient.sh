@@ -33,15 +33,9 @@ fi
 # Define o conteúdo da variável de ambiente cyberwise
 CYBERWISE_CONTENT='#!/bin/bash
 
-# Obtém o nome de usuário atual
-USERNAME=$(whoami)
-
-# Define o diretório onde está o arquivo .jar
-JAR_DIR="/home/$USERNAME/cw-bucket"
-
-# Navega até o diretório do arquivo .jar
-cd "$JAR_DIR"
-
+# Navega até  o .jar
+cd
+cd cw-bucket
 # Executa o arquivo .jar
 java -jar jar-cyberwise.jar'
 
