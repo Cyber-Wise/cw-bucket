@@ -42,7 +42,7 @@ JAR_DIR="/home/$USERNAME/cw-bucket"
 cd "$JAR_DIR"
 
 # Executa o arquivo .jar
-java -jar nome_do_arquivo.jar'
+java -jar jar-cyberwise.jar'
 
 # Define o caminho do arquivo de perfil do shell
 PROFILE_FILE=~/.bashrc
