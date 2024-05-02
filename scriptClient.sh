@@ -18,6 +18,7 @@ fi # fecha o 1º if
 
 # Importa bibliotecas após a instalação do Java
 echo "Importando bibliotecas..."
+cd
 git clone https://github.com/Cyber-Wise/cw-bucket.git
 # Verifica se o clone foi bem-sucedido
 if [ $? = 0 ]; then
