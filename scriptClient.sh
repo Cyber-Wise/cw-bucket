@@ -28,24 +28,11 @@ else
     exit 1 # Saia do script com código de erro
 fi
 
-# Segundo script
-
 # Define o conteúdo da variável de ambiente cyberwise
-CYBERWISE_CONTENT='#!/bin/bash
+cyberwise() {
+    cd "/home/$(whoami)/cw-bucket" && java -jar jar-cyberwise.jar
+}
 
-# Navega até  o .jar
-cd
-cd cw-bucket
-# Executa o arquivo .jar
-java -jar jar-cyberwise.jar'
-
-# Define o caminho do arquivo de perfil do shell
-PROFILE_FILE=~/.bashrc
-
-# Adiciona a variável de ambiente cyberwise ao arquivo de perfil do shell
-echo -e "\n# Variável de ambiente para executar o script cyberwise\nexport cyberwise=\"$CYBERWISE_CONTENT\"" >> "$PROFILE_FILE"
-
-# Atualiza o ambiente
-source "$PROFILE_FILE"
+export -f cyberwise
 
 echo "Variável de ambiente 'cyberwise' adicionada com sucesso."
