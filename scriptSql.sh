@@ -9,6 +9,9 @@ fi
 # Atualiza os repositórios
 apt update
 
+#Ajustar hora do sitema
+timedatectl set-timezone America/Sao_Paulo
+
 # Instala o MySQL Server
 apt install -y mysql-server
 
