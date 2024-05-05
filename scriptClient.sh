@@ -30,7 +30,7 @@ fi
 
 # Define o conteúdo da variável de ambiente cyberwise
 cyberwise() {
-    cd "/home/$(whoami)/cw-bucket/jar_cyberwise_jar" && java -jar jar-cyberwise.jar
+    cd "/home/$(whoami)/cw-bucket/jar_cyberwise_jar" && java -jar jar_cyberwise.jar
 }
 
 export -f cyberwise
