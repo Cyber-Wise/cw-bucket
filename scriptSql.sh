@@ -62,7 +62,7 @@ mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'cyber100'; \
           ALTER USER 'cyberwise' IDENTIFIED WITH mysql_native_password BY 'cyber100'; \
           FLUSH PRIVILEGES;"
 
-mysql -u cyberwise -p cyber100 < executavelBD.sql
+mysql -u cyberwise -p < executavelBD.sql
 
 
 echo "Configurações concluídas."
