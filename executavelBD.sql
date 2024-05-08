@@ -64,6 +64,8 @@ CREATE TABLE maquina(
 );
 
 insert into maquina values (null, 'cyberwise notebook', '1515', 1, 1);
+insert into maquina values (null, 'cyberwise dell', '1313', 1, 1);
+
 
 -- INSERT INTO maquina (numSerie)
 -- SELECT 1212
