@@ -9,6 +9,7 @@ CREATE TABLE empresa (
     cnpj char(14)
 	);
     
+insert into empresa values (null, 'cyberwise', '23423456545', '23456789876543');
 
 CREATE TABLE cargos(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -32,7 +33,7 @@ CREATE TABLE funcionario(
     FOREIGN KEY (fk_cargo) REFERENCES cargos(id)
 );
 
-
+insert into funcionario values(null, 'Pablo', 'pablo@cyberwise.com', 'cyber100', 1,1);
 
 
 CREATE TABLE parametros(
@@ -48,8 +49,9 @@ criticoRAM VARCHAR(20),
 FOREIGN KEY (fk_empresa) REFERENCES empresa(id)
 );
 
+insert into parametros values (null, 'cyberwise1', '60', '90', '60', '90', '60', '90', 1);
 
-select * from parametros;
+-- select * from parametros;
 
 CREATE TABLE maquina(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -61,7 +63,7 @@ CREATE TABLE maquina(
     FOREIGN KEY (fk_parametros) REFERENCES parametros(id)
 );
 
-
+insert into maquina values (null, 'cyberwise notebook', '1515', 1, 1);
 
 -- INSERT INTO maquina (numSerie)
 -- SELECT 1212
@@ -78,7 +80,7 @@ CREATE TABLE monitoramento(
 	data_hora  datetime,
     FOREIGN KEY (fk_maquina) REFERENCES maquina(id)
 );
-select * from monitoramento;
+-- select * from monitoramento;
 
 
 CREATE TABLE alertas(
@@ -89,12 +91,14 @@ componente VARCHAR(30),
 fk_maquina INT,
 FOREIGN KEY (fk_maquina) REFERENCES maquina(id)
 );
+
+show tables;
 	
-    select * from empresa;	
-    select * from funcionario;
-    select * from maquina;
-    select * from monitoramento;
-    select * from cargos;
-    select * from parametros;
+   -- select * from empresa;	
+   -- select * from funcionario;
+   -- select * from maquina;
+   -- select * from monitoramento;
+   -- select * from cargos;
+   -- select * from parametros;
     
     -- drop database cyberwise;
