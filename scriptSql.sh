@@ -9,11 +9,16 @@ fi
 # Atualiza os repositórios
 apt update
 
-#Ajustar hora do sitema
+# Ajusta a hora do sistema
 timedatectl set-timezone America/Sao_Paulo
 
-# Instala o MySQL Server
-apt install -y mysql-server
+# Verifica se o MySQL já está instalado
+if ! command -v mysql &>/dev/null; then
+  echo "Instalando o MySQL Server..."
+  apt install -y mysql-server
+else
+  echo "MySQL Server já está instalado."
+fi
 
 # Inicia o serviço do MySQL
 systemctl start mysql
@@ -55,14 +60,29 @@ expect eof
 # Executa as configurações automáticas
 echo "$SECURE_MYSQL"
 
+# Define variáveis de senha
+ROOT_PASSWORD="cyber100"
+USER_PASSWORD="cyber100"
+
 # Define uma senha para o usuário root e cria o usuário cyberwise com todas as permissões
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'cyber100'; \
-          CREATE USER 'cyberwise'@'%' IDENTIFIED BY 'cyber100'; \
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}'; \
+          CREATE USER 'cyberwise'@'%' IDENTIFIED BY '${USER_PASSWORD}'; \
           GRANT ALL PRIVILEGES ON *.* TO 'cyberwise'; \
-          ALTER USER 'cyberwise' IDENTIFIED WITH mysql_native_password BY 'cyber100'; \
+          ALTER USER 'cyberwise' IDENTIFIED WITH mysql_native_password BY '${USER_PASSWORD}'; \
           FLUSH PRIVILEGES;"
 
-mysql -u cyberwise -p < executavelBD.sql
+# Verifica e configura o bind-address
+MYSQL_CONF_FILE="/etc/mysql/mysql.conf.d/mysqld.cnf"
+if grep -q "^bind-address" $MYSQL_CONF_FILE; then
+  sed -i "s/^bind-address.*/bind-address = 0.0.0.0/" $MYSQL_CONF_FILE
+else
+  echo "bind-address = 0.0.0.0" >> $MYSQL_CONF_FILE
+fi
 
+# Reinicia o serviço MySQL para aplicar as mudanças
+systemctl restart mysql
+
+# Executa script SQL
+mysql -u cyberwise -p${USER_PASSWORD} < executavelBD.sql
 
 echo "Configurações concluídas."
