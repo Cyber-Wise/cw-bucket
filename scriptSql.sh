@@ -70,7 +70,7 @@ if [[ $container_status == Up* ]]; then
     echo "O container foi criado com sucesso e está em execução."
 
     # Aguardar alguns segundos para o MySQL iniciar completamente
-    sleep 30
+    sleep 5
 
     # Criar o usuário cyberwise e conceder todos os privilégios a ele
     echo "Criando o usuário 'cyberwise' e concedendo privilégios..."
