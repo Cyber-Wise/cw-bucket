@@ -96,7 +96,8 @@ container_status=$(sudo docker ps -a --filter "name=ContainerBD" --format "{{.St
 if [[ $container_status == Up* ]]; then
     echo "O container foi criado com sucesso e está em execução."
 
-    # Aguardar alguns segundos para o MySQL iniciar completamente
+    # Avisar o usuário sobre a espera
+    echo "Aguardando 30 segundos para o MySQL iniciar completamente..."
     sleep 30
 
     # Criar o usuário cyberwise e conceder todos os privilégios a ele
@@ -107,7 +108,7 @@ if [[ $container_status == Up* ]]; then
 
     # Executar o script SQL "BD_CyberwiseClient"
     echo "Executando o script SQL 'BD_CyberwiseClient'..."
-    sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /home/$(whoami)/cw-bucket/BD_CyberwiseClient.sql'
+    sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /home/ubuntu/cw-bucket/BD_CyberwiseClient.sql'
 
     echo "Script SQL 'BD_CyberwiseClient' executado com sucesso."
 else
