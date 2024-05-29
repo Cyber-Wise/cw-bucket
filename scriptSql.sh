@@ -29,8 +29,12 @@ else
     exit 1
 fi
 
-# Define o conteúdo da variável de ambiente cyberwise
-alias cyberwise='java -jar "/home/$(whoami)/cw-bucket/jar_cyberwise_jar/jar_cyberwise.jar"'
+# Define o alias cyberwise
+echo "Adicionando alias 'cyberwise' ao ~/.bashrc..."
+echo "alias cyberwise='java -jar \"/home/$(whoami)/cw-bucket/jar_cyberwise_jar/jar_cyberwise.jar\"'" >> ~/.bashrc
+
+# Recarregar o arquivo ~/.bashrc para que o alias seja imediatamente disponível
+source ~/.bashrc
 
 echo "Alias 'cyberwise' adicionado com sucesso."
 
@@ -70,7 +74,7 @@ if [[ $container_status == Up* ]]; then
     echo "O container foi criado com sucesso e está em execução."
 
     # Aguardar alguns segundos para o MySQL iniciar completamente
-    sleep 10
+    sleep 30
 
     # Criar o usuário cyberwise e conceder todos os privilégios a ele
     echo "Criando o usuário 'cyberwise' e concedendo privilégios..."
