@@ -37,8 +37,3 @@ export -f cyberwise
 
 echo "Variável de ambiente cyberwise adicionada com sucesso."
 
-jarPablo() {
-    java -jar "/home/$(whoami)/cw-bucket/jarPablo/jar_cyberwise.jar"
-}
-
-export -f jarPablo

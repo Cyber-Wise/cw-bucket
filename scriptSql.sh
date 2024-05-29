@@ -1,88 +1,89 @@
 #!/bin/bash
 
-# Verifica se o usuário é root
-if [ "$(id -u)" -ne 0 ]; then
-  echo "Este script precisa ser executado como root" 1>&2
-  exit 1
-fi
-
-# Atualiza os repositórios
-apt update
-
-# Ajusta a hora do sistema
-timedatectl set-timezone America/Sao_Paulo
-
-# Verifica se o MySQL já está instalado
-if ! command -v mysql &>/dev/null; then
-  echo "Instalando o MySQL Server..."
-  apt install -y mysql-server
+# Verifica se o Java está instalado
+java -version
+if [ $? = 0 ]; then
+    echo "Java instalado."
 else
-  echo "MySQL Server já está instalado."
+    echo "Java não instalado."
+    echo "Instalando o Java..."
+    sudo apt install openjdk-17-jre -y
+    # Verifica se a instalação foi bem-sucedida
+    if [ $? = 0 ]; then
+        echo "Java instalado com sucesso!"
+    else
+        echo "Falha na instalação do Java. Verifique os logs para mais informações."
+        exit 1
+    fi
 fi
 
-# Inicia o serviço do MySQL
-systemctl start mysql
-
-# Habilita o MySQL para iniciar na inicialização do sistema
-systemctl enable mysql
-
-# Instala o pacote expect se necessário
-if ! command -v expect &>/dev/null; then
-  echo "Instalando o pacote expect..."
-  apt-get update
-  apt-get install -y expect
-fi
-
-# Configurações automáticas para o mysql_secure_installation
-SECURE_MYSQL=$(expect -c "
-spawn mysql_secure_installation
-set timeout 100
-expect \"Press y|Y for Yes, any other key for No:\"
-send \"y\r\"
-set timeout 100
-expect \"Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG:\"
-send \"0\r\"
-set timeout 100
-expect \"Remove anonymous users? (Press y|Y for Yes, any other key for No) :\"
-send \"n\r\"
-set timeout 100
-expect \"Disallow root login remotely? (Press y|Y for Yes, any other key for No) :\"
-send \"y\r\"
-set timeout 100
-expect \"Remove test database and access to it? (Press y|Y for Yes, any other key for No) :\"
-send \"n\r\"
-set timeout 100
-expect \"Reload privilege tables now? (Press y|Y for Yes, any other key for No) :\"
-send \"y\r\"
-expect eof
-")
-
-# Executa as configurações automáticas
-echo "$SECURE_MYSQL"
-
-# Define variáveis de senha
-ROOT_PASSWORD="cyber100"
-USER_PASSWORD="cyber100"
-
-# Define uma senha para o usuário root e cria o usuário cyberwise com todas as permissões
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}'; \
-          CREATE USER 'cyberwise'@'%' IDENTIFIED BY '${USER_PASSWORD}'; \
-          GRANT ALL PRIVILEGES ON *.* TO 'cyberwise'; \
-          ALTER USER 'cyberwise' IDENTIFIED WITH mysql_native_password BY '${USER_PASSWORD}'; \
-          FLUSH PRIVILEGES;"
-
-# Verifica e configura o bind-address
-MYSQL_CONF_FILE="/etc/mysql/mysql.conf.d/mysqld.cnf"
-if grep -q "^bind-address" $MYSQL_CONF_FILE; then
-  sed -i "s/^bind-address.*/bind-address = 0.0.0.0/" $MYSQL_CONF_FILE
+# Importa bibliotecas após a instalação do Java
+echo "Importando bibliotecas..."
+cd
+git clone https://github.com/Cyber-Wise/cw-bucket.git
+# Verifica se o clone foi bem-sucedido
+if [ $? = 0 ]; then
+    echo "Bibliotecas importadas com sucesso!"
 else
-  echo "bind-address = 0.0.0.0" >> $MYSQL_CONF_FILE
+    echo "Falha ao importar bibliotecas. Verifique os logs para mais informações."
+    exit 1
 fi
 
-# Reinicia o serviço MySQL para aplicar as mudanças
-systemctl restart mysql
+# Define o conteúdo da variável de ambiente cyberwise
+alias cyberwise='java -jar "/home/$(whoami)/cw-bucket/jar_cyberwise_jar/jar_cyberwise.jar"'
 
-# Executa script SQL
-mysql -u cyberwise -p${USER_PASSWORD} < executavelBD.sql
+echo "Alias 'cyberwise' adicionado com sucesso."
 
-echo "Configurações concluídas."
+# Instalação do Docker e configuração do MySQL
+# Atualizar a lista de pacotes disponíveis
+echo "Atualizando a lista de pacotes..."
+sudo apt update
+
+# Instalar o Docker
+echo "Instalando o Docker..."
+sudo apt install docker.io -y
+
+# Iniciar o serviço Docker
+echo "Iniciando o serviço Docker..."
+sudo systemctl start docker
+
+# Habilitar o Docker para iniciar com o sistema operacional
+echo "Habilitando o Docker para iniciar com o sistema operacional..."
+sudo systemctl enable docker
+
+# Fazer pull da imagem do MySQL 5.7 do Docker Hub
+echo "Baixando a imagem do MySQL 5.7..."
+sudo docker pull mysql:5.7
+
+# Criar e iniciar o container MySQL
+echo "Criando e iniciando o container MySQL..."
+sudo docker run -d -p 3306:3306 --name ContainerBD -e MYSQL_DATABASE=bancoLocal -e MYSQL_ROOT_PASSWORD=cyber100 mysql:5.7
+
+# Verificar se o container foi criado com sucesso
+echo "Verificando o status do container..."
+sudo docker ps -a
+
+# Verificar o status do container
+container_status=$(sudo docker ps -a --filter "name=ContainerBD" --format "{{.Status}}")
+
+if [[ $container_status == Up* ]]; then
+    echo "O container foi criado com sucesso e está em execução."
+
+    # Aguardar alguns segundos para o MySQL iniciar completamente
+    sleep 30
+
+    # Criar o usuário cyberwise e conceder todos os privilégios a ele
+    echo "Criando o usuário 'cyberwise' e concedendo privilégios..."
+    sudo docker exec -i ContainerBD mysql -u root -pcyber100 -e "CREATE USER 'cyberwise'@'%' IDENTIFIED BY 'cyber100'; ALTER USER 'cyberwise' IDENTIFIED WITH mysql_native_password BY 'cyber100'; GRANT ALL PRIVILEGES ON *.* TO 'cyberwise'@'%'; FLUSH PRIVILEGES;"
+
+    echo "Usuário 'cyberwise' criado com sucesso e privilégios concedidos."
+
+    # Executar o script SQL "BD_CyberwiseClient"
+    echo "Executando o script SQL 'BD_CyberwiseClient'..."
+    sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /home/$(whoami)/cw-bucket/BD_CyberwiseClient.sql'
+
+    echo "Script SQL 'BD_CyberwiseClient' executado com sucesso."
+else
+    echo "A criação do container falhou. Verificando os logs..."
+    sudo docker logs ContainerBD
+fi
