@@ -1,5 +1,28 @@
 #!/bin/bash
 
+# Atualizar a lista de pacotes disponíveis
+echo "Atualizando a lista de pacotes..."
+sudo apt update
+
+# Atualizar os pacotes instalados
+echo "Atualizando os pacotes instalados..."
+sudo apt upgrade -y
+
+# Trocar a senha do root
+echo "Trocando a senha do usuário root..."
+echo "root:cyber100" | sudo chpasswd
+
+# Trocar a senha do usuário ubuntu
+echo "Trocando a senha do usuário ubuntu..."
+if id "ubuntu" &>/dev/null; then
+    echo "ubuntu:cyber100" | sudo chpasswd
+    echo "Senha do usuário ubuntu trocada com sucesso."
+else
+    echo "Usuário ubuntu não encontrado."
+fi
+
+echo "Atualização e troca de senhas concluídas com sucesso."
+
 # Verifica se o Java está instalado
 java -version
 if [ $? = 0 ]; then
@@ -19,7 +42,7 @@ fi
 
 # Importa bibliotecas após a instalação do Java
 echo "Importando bibliotecas..."
-cd
+cd ~
 git clone https://github.com/Cyber-Wise/cw-bucket.git
 # Verifica se o clone foi bem-sucedido
 if [ $? = 0 ]; then
@@ -73,21 +96,3 @@ container_status=$(sudo docker ps -a --filter "name=ContainerBD" --format "{{.St
 if [[ $container_status == Up* ]]; then
     echo "O container foi criado com sucesso e está em execução."
 
-    # Aguardar alguns segundos para o MySQL iniciar completamente
-    sleep 30
-
-    # Criar o usuário cyberwise e conceder todos os privilégios a ele
-    echo "Criando o usuário 'cyberwise' e concedendo privilégios..."
-    sudo docker exec -i ContainerBD mysql -u root -pcyber100 -e "CREATE USER 'cyberwise'@'%' IDENTIFIED BY 'cyber100'; ALTER USER 'cyberwise' IDENTIFIED WITH mysql_native_password BY 'cyber100'; GRANT ALL PRIVILEGES ON *.* TO 'cyberwise'@'%'; FLUSH PRIVILEGES;"
-
-    echo "Usuário 'cyberwise' criado com sucesso e privilégios concedidos."
-
-    # Executar o script SQL "BD_CyberwiseClient"
-    echo "Executando o script SQL 'BD_CyberwiseClient'..."
-    sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /home/$(whoami)/cw-bucket/BD_CyberwiseClient.sql'
-
-    echo "Script SQL 'BD_CyberwiseClient' executado com sucesso."
-else
-    echo "A criação do container falhou. Verificando os logs..."
-    sudo docker logs ContainerBD
-fi
