@@ -43,14 +43,29 @@ fi
 # Importa bibliotecas após a instalação do Java
 echo "Importando bibliotecas..."
 cd ~
-git clone https://github.com/Cyber-Wise/cw-bucket.git
-# Verifica se o clone foi bem-sucedido
-if [ $? = 0 ]; then
-    echo "Bibliotecas importadas com sucesso!"
+
+# Verifica se o diretório cw-bucket já existe
+if [ -d "cw-bucket" ]; then
+    echo "Diretório cw-bucket já existe. Realizando git pull..."
+    cd cw-bucket
+    git pull
+    if [ $? = 0 ]; then
+        echo "Bibliotecas atualizadas com sucesso!"
+    else
+        echo "Falha ao atualizar bibliotecas. Verifique os logs para mais informações."
+        exit 1
+    fi
 else
-    echo "Falha ao importar bibliotecas. Verifique os logs para mais informações."
-    exit 1
+    echo "Clonando repositório cw-bucket..."
+    git clone https://github.com/Cyber-Wise/cw-bucket.git
+    if [ $? = 0 ]; then
+        echo "Bibliotecas importadas com sucesso!"
+    else
+        echo "Falha ao importar bibliotecas. Verifique os logs para mais informações."
+        exit 1
+    fi
 fi
+
 
 # Define o alias cyberwise
 echo "Adicionando alias 'cyberwise' ao ~/.bashrc..."
