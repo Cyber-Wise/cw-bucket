@@ -69,7 +69,7 @@ fi
 
 # Define o alias cyberwise
 echo "Adicionando alias 'cyberwise' ao ~/.bashrc..."
-echo "alias cyberwise='java -jar \"/home/$(whoami)/cw-bucket/jar_cyberwise_jar/jar_cyberwise.jar\"'" >> ~/.bashrc
+echo "alias cyberwise='java -jar \"/home/$(whoami)/cw-bucket/cyberwise/jar_cyberwise.jar\"'" >> ~/.bashrc
 
 # Recarregar o arquivo ~/.bashrc para que o alias seja imediatamente disponível
 source ~/.bashrc
