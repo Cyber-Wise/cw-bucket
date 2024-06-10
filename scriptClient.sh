@@ -121,9 +121,13 @@ if [[ $container_status == Up* ]]; then
 
     echo "Usuário 'cyberwise' criado com sucesso e privilégios concedidos."
 
+   # Copiar o script SQL para o container
+    echo "Copiando o script SQL 'BD_CyberwiseClient.sql' para o container..."
+    sudo docker cp ~/cw-bucket/BD_CyberwiseClient.sql ContainerBD:/BD_CyberwiseClient.sql
+
     # Executar o script SQL "BD_CyberwiseClient"
     echo "Executando o script SQL 'BD_CyberwiseClient'..."
-    sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /home/ubuntu/cw-bucket/BD_CyberwiseClient.sql'
+    sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /BD_CyberwiseClient.sql'
 
     echo "Script SQL 'BD_CyberwiseClient' executado com sucesso."
 else
