@@ -68,20 +68,20 @@ importar_bibliotecas() {
 
 # Função para definir o alias cyberwise
 definir_alias_cyberwise() {
-    local bashrc_file="/etc/bash.bashrc"
+    local user_bashrc_file="$HOME/.bashrc"
     local alias_command="alias cyberwise='java -jar \"/home/$(whoami)/cw-bucket/cyberwise/jar_cyberwise.jar\"'"
 
-    # Adiciona o alias ao /etc/bash.bashrc se ainda não estiver presente
-    if ! grep -q "$alias_command" "$bashrc_file"; then
-        echo "Adicionando alias 'cyberwise' ao $bashrc_file..."
-        echo "$alias_command" | sudo tee -a "$bashrc_file" > /dev/null
-        echo "Alias 'cyberwise' adicionado com sucesso."
+    # Adiciona o alias ao ~/.bashrc do usuário atual se ainda não estiver presente
+    if ! grep -q "$alias_command" "$user_bashrc_file"; then
+        echo "Adicionando alias 'cyberwise' ao $user_bashrc_file..."
+        echo "$alias_command" >> "$user_bashrc_file"
+        echo "Alias 'cyberwise' adicionado com sucesso ao $user_bashrc_file."
     else
-        echo "Alias 'cyberwise' já está presente no $bashrc_file."
+        echo "Alias 'cyberwise' já está presente no $user_bashrc_file."
     fi
 
-    # Recarregar o arquivo /etc/bash.bashrc para que o alias seja imediatamente disponível na sessão atual
-    source "$bashrc_file"
+    # Recarregar o arquivo ~/.bashrc para que o alias seja imediatamente disponível na sessão atual
+    source "$user_bashrc_file"
 }
 
 # Função para instalar e configurar Docker e MySQL
