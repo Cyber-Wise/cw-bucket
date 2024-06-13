@@ -123,7 +123,7 @@ configurar_mysql_docker() {
         echo "Baixando a imagem do MySQL 5.7..."
         sudo docker pull mysql:5.7
         echo "Criando e iniciando o container MySQL..."
-        sudo docker run -d -p 3306:3306 --name ContainerBD -e MYSQL_DATABASE=CyberwiseClient -e MYSQL_ROOT_PASSWORD=cyber100 mysql:5.7
+        sudo docker run -d -p 3306:3306 --name ContainerBD -e MYSQL_DATABASE=bancoLocal -e MYSQL_ROOT_PASSWORD=cyber100 mysql:5.7
         echo "Verificando o status do container..."
         sudo docker ps -a
 
@@ -138,7 +138,7 @@ configurar_mysql_docker() {
             echo "Copiando o script SQL 'BD_CyberwiseClient.sql' para o container..."
             sudo docker cp ~/cw-bucket/BD_CyberwiseClient.sql ContainerBD:/BD_CyberwiseClient.sql
             echo "Executando o script SQL 'BD_CyberwiseClient'..."
-            sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 CyberwiseClient < /BD_CyberwiseClient.sql'
+            sudo docker exec -i ContainerBD sh -c 'mysql -u root -pcyber100 bancoLocal < /BD_CyberwiseClient.sql'
             echo "Script SQL 'BD_CyberwiseClient' executado com sucesso."
         else
             echo "A criação do container falhou. Verificando os logs..."
