@@ -5,6 +5,7 @@ cd /home/ubuntu/cw-bucket/cyberwise
 
 # Atualizar o repositório git
 echo "Atualizando o repositório..."
+git restore .
 git pull
 
 # Executar o JAR em primeiro plano
