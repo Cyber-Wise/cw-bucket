@@ -7,3 +7,39 @@ Mensagem: Login realizado com sucesso
 logLevel: Info
 statusCode: 200
 }
+{
+Sistema Operacional: Ubuntu
+Arquitetura: 64
+hostname: ip-172-31-21-72
+Data: 13/06/2024 14:20:54.086
+Mensagem: Login realizado com sucesso
+logLevel: Info
+statusCode: 200
+}
+{
+Sistema Operacional: Ubuntu
+Arquitetura: 64
+hostname: ip-172-31-21-72
+Data: 13/06/2024 14:21:06.458
+Mensagem: Login realizado com sucesso
+logLevel: Info
+statusCode: 200
+}
+{
+Sistema Operacional: Ubuntu
+Arquitetura: 64
+hostname: ip-172-31-21-72
+Data: 13/06/2024 14:21:19.261
+Mensagem: Login realizado com sucesso
+logLevel: Info
+statusCode: 200
+}
+{
+Sistema Operacional: Ubuntu
+Arquitetura: 64
+hostname: ip-172-31-21-72
+Data: 13/06/2024 14:21:48.652
+Mensagem: Login realizado com sucesso
+logLevel: Info
+statusCode: 200
+}
