@@ -1,0 +1,9 @@
+{
+Sistema Operacional: Ubuntu
+Arquitetura: 64
+hostname: ip-172-31-21-72
+Data: 13/02/2024 14:02:07.628
+Mensagem: Login realizado com sucesso
+logLevel: Info
+statusCode: 200
+}
